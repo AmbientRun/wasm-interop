@@ -1,0 +1,17 @@
+{
+    "build-app": {
+        "cmd": [
+            "wasm-pack",
+            "build"
+        ],
+        "cwd": "app/"
+    },
+    "serve": {
+        "cmd": [
+            "npm",
+            "run",
+            "dev"
+        ],
+        "cwd": "www/"
+    }
+}
