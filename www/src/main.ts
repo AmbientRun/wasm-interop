@@ -1,5 +1,15 @@
 import "./style.css";
 
-import("app").then((app) => {
+import "/vite.svg";
+
+// import client_wasm from "/wasm/client.wasm?url";
+async function run_app() {
+  const { default: init, start } = await import("app");
+
+  // Fetch the wasm module
   console.info("Loaded app wasm");
-});
+
+  start("/wasm/client.wasm");
+}
+
+run_app();

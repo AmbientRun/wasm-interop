@@ -6,6 +6,12 @@
         ],
         "cwd": "app/"
     },
+    "build-client": {
+        "cmd": [
+            "cargo",
+            "build"
+        ]
+    },
     "serve": {
         "cmd": [
             "npm",

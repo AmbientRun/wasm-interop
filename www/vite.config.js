@@ -1,8 +1,19 @@
 import wasm from "vite-plugin-wasm";
 import { defineConfig } from "vite";
+import { viteStaticCopy } from "vite-plugin-static-copy";
 
 export default defineConfig({
-    plugins: [wasm()],
+    plugins: [
+        wasm(),
+        viteStaticCopy({
+            targets: [
+                {
+                    src: "../target/wasm32-unknown-unknown/debug/client.wasm",
+                    dest: "wasm",
+                },
+            ],
+        }),
+    ],
     server: {
         headers: {
             // Enables shared array buffers
