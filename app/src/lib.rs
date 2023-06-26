@@ -1,4 +1,4 @@
-use js_sys::{Object, Reflect, WebAssembly};
+use js_sys::{Function, Object, Reflect, WebAssembly};
 use tracing_subscriber::{fmt::time::UtcTime, prelude::*};
 use tracing_web::MakeConsoleWriter;
 use wasm_bindgen::prelude::*;
@@ -46,7 +46,23 @@ pub async fn start(client_wasm_url: &str) {
 
     tracing::info!("Module exports: {exports:?}");
 
-    // tracing::info!(?resp, status=?resp.status(), "Got response");
+    let add = Reflect::get(exports.as_ref(), &"call_int2".into())
+        .expect("add export wasn't found")
+        .dyn_into::<Function>()
+        .expect("add export wasn't a function");
+
+    let result = add.call2(&JsValue::null(), &1.into(), &2.into()).unwrap();
+
+    tracing::info!("Add function: {add:?} = {result:?}");
+
+    let call_str = Reflect::get(exports.as_ref(), &"call_str".into())
+        .expect("add export wasn't found")
+        .dyn_into::<Function>()
+        .expect("add export wasn't a function");
+
+    let result = add.call2(&JsValue::null(), &1.into(), &2.into()).unwrap();
+
+    tracing::info!("Add function: {add:?} = {result:?}");
 
     println!("Hello, world!");
 }
