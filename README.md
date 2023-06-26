@@ -77,8 +77,22 @@ Calling this function from _JavaScript_, requires taking your js `string` and en
 allocating and copying the bytes into the target module's memory to obtain a pointer. The pointer is then what is
 ultimately passed into wasm.
 
+## Wasm bindgen CLI
+
+The `wasm-bindgen` cli will consume and parse the generated Rust binary `.wasm` file.
+
+During macro time in rust, extra functions called `__wbindgen_describe_{func}` will be emitted, and these will end up
+as exported functions in the wasm binary.
+
+The `wasm-bindgen` tool will find and execute these functions to obtain reflection data to reconstruct the higher-order
+types that the function will consume, such as (i32, i32) to a `String`. Knowing this, the appropriate `js`
+functions will be generated which takes the corresponding type, and boils it down into primitive types, allocating and
+copying to the target memory if needed. This ensures that the consuming `JavaScript` code can call a wasm function
+through the `mywasm.js` file using conventional types and javascript objects rather than integers.
+
 ## Links
 
 - (Rust Type conversions)[https://rustwasm.github.io/docs/book/print.html]
 - (WASI Marshalling)[https://rob-blackbourn.github.io/blog/webassembly/wasm/javascript/c/clang/wasi-sdk/marshalling/2020/07/02/wasi-marshalling.html]
 - (FromWasmAbi)[https://docs.rs/wasm-bindgen/latest/wasm_bindgen/convert/trait.FromWasmAbi.html]
+- (Exporting to Rust)[https://rustwasm.github.io/wasm-bindgen/contributing/design/exporting-rust.html]
