@@ -19,3 +19,8 @@ pub struct Composite {
 pub extern "C" fn call_struct(s: Composite) -> i32 {
     s.a
 }
+
+#[no_mangle]
+pub extern "C" fn timestamp() -> f64 {
+    js_sys::Date::now()
+}

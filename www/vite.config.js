@@ -8,7 +8,7 @@ export default defineConfig({
         viteStaticCopy({
             targets: [
                 {
-                    src: "../target/wasm32-unknown-unknown/debug/client.wasm",
+                    src: "../client/pkg/client_bg.wasm",
                     dest: "wasm",
                 },
             ],

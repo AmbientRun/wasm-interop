@@ -26,7 +26,19 @@ pub async fn start(client_wasm_url: &str) {
     //     .dyn_into::<Response>()
     //     .unwrap();
 
+    let wbg = Object::new();
+
+    js_sys::Reflect::set(
+        &wbg,
+        &"__wbindgen_throw".into(),
+        &Function::new_no_args("").into(),
+    )
+    .unwrap();
+
     let imports = Object::new();
+    js_sys::Reflect::set(&imports, &"wbg".into(), &wbg).unwrap();
+
+    tracing::info!("Imports: {imports:?}");
 
     // Returns a `{ module, instance }` object.
     let res = JsFuture::from(WebAssembly::instantiate_streaming(&resp, &imports))
@@ -38,31 +50,29 @@ pub async fn start(client_wasm_url: &str) {
         .dyn_into::<WebAssembly::Instance>()
         .unwrap();
 
-    tracing::info!("Instantiated WebAssembly instance");
-
     // let module = Reflect::get(res, "instance"): tracing::info!("Instantiated WebAssembly instance");
 
     let exports = instance.exports();
 
     tracing::info!("Module exports: {exports:?}");
+    //
+    // let add = Reflect::get(exports.as_ref(), &"call_int2".into())
+    //     .expect("add export wasn't found")
+    //     .dyn_into::<Function>()
+    //     .expect("add export wasn't a function");
+    //
+    // let result = add.call2(&JsValue::null(), &1.into(), &2.into()).unwrap();
+    //
+    // tracing::info!("Add function: {add:?} = {result:?}");
 
-    let add = Reflect::get(exports.as_ref(), &"call_int2".into())
-        .expect("add export wasn't found")
+    let call_timestamp = Reflect::get(exports.as_ref(), &"call_timestamp".into())
+        .expect("timestamp export wasn't found")
         .dyn_into::<Function>()
         .expect("add export wasn't a function");
 
-    let result = add.call2(&JsValue::null(), &1.into(), &2.into()).unwrap();
+    let result = call_timestamp.call0(&JsValue::null()).unwrap();
 
-    tracing::info!("Add function: {add:?} = {result:?}");
-
-    let call_str = Reflect::get(exports.as_ref(), &"call_str".into())
-        .expect("add export wasn't found")
-        .dyn_into::<Function>()
-        .expect("add export wasn't a function");
-
-    let result = add.call2(&JsValue::null(), &1.into(), &2.into()).unwrap();
-
-    tracing::info!("Add function: {add:?} = {result:?}");
+    tracing::info!("Date time stamp: {result:?}");
 
     println!("Hello, world!");
 }

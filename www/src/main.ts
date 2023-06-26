@@ -9,7 +9,7 @@ async function run_app() {
   // Fetch the wasm module
   console.info("Loaded app wasm");
 
-  start("/wasm/client.wasm");
+  start("/wasm/client_bg.wasm");
 }
 
 run_app();

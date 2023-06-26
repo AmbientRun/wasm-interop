@@ -7,9 +7,12 @@
         "cwd": "app/"
     },
     "build-client": {
+        "cwd": "./client",
         "cmd": [
-            "cargo",
-            "build"
+            "wasm-pack",
+            "build",
+            "--target",
+            "no-modules"
         ]
     },
     "serve": {
