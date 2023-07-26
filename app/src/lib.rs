@@ -5,7 +5,7 @@ use wasm_bindgen::prelude::*;
 use wasm_bindgen_futures::JsFuture;
 
 #[wasm_bindgen]
-pub async fn start(client_wasm_url: &str) {
+pub async fn load_client(client_wasm_url: &str) {
     console_error_panic_hook::set_once();
 
     let fmt_layer = tracing_subscriber::fmt::layer()
@@ -75,4 +75,29 @@ pub async fn start(client_wasm_url: &str) {
     tracing::info!("Date time stamp: {result:?}");
 
     println!("Hello, world!");
+}
+
+#[tracing::instrument(level = "info")]
+#[wasm_bindgen]
+pub async fn run_loop(interval: f32, callback: &Function) {
+    console_error_panic_hook::set_once();
+
+    let fmt_layer = tracing_subscriber::fmt::layer()
+        .with_ansi(false)
+        .with_timer(UtcTime::rfc_3339())
+        .with_writer(MakeConsoleWriter);
+
+    tracing_subscriber::registry().with(fmt_layer).init();
+
+    for i in 0.. {
+        tracing::info!("Iteration {i}");
+
+        gloo_timers::future::TimeoutFuture::new(interval as u32).await;
+
+        tracing::info!("Finished sleeping");
+
+        callback
+            .call1(&JsValue::null(), &i.into())
+            .expect("Failed to call callback");
+    }
 }

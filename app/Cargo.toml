@@ -18,3 +18,4 @@ tracing-subscriber = { version = "0.3", features = ["time"] }
 tracing-web = "0.1"
 time = { version = "0.3", features = ["wasm-bindgen"] }
 console_error_panic_hook = "0.1"
+gloo-timers = { version = "0.2.6", features = ["futures"] }
