@@ -14,4 +14,17 @@ async function run_app() {
   });
 }
 
+async function run_app2() {
+  const { default: init, run_loop } = await import("app");
+
+  // Fetch the wasm module
+  console.info("Loaded app wasm");
+
+  run_loop(5000, (i: Number) => {
+    console.log(`I am another callback and I have been called ${i} times`)
+  });
+}
+
+
 run_app();
+run_app2();
