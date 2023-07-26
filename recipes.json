@@ -2,7 +2,9 @@
     "build-app": {
         "cmd": [
             "wasm-pack",
-            "build"
+            "build",
+            "--target",
+            "web"
         ],
         "cwd": "app/"
     },

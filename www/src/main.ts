@@ -4,7 +4,10 @@ import "/vite.svg";
 
 // import client_wasm from "/wasm/client.wasm?url";
 async function run_app() {
+  // https://rustwasm.github.io/wasm-bindgen/examples/without-a-bundler.html
   const { default: init, run_loop } = await import("app");
+
+  await init()
 
   // Fetch the wasm module
   console.info("Loaded app wasm");
@@ -16,6 +19,8 @@ async function run_app() {
 
 async function run_app2() {
   const { default: init, run_loop } = await import("app");
+
+  await init()
 
   // Fetch the wasm module
   console.info("Loaded app wasm");
